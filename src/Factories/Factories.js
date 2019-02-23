@@ -35,7 +35,7 @@ class Factories extends Component {
           {
             this.state.factories && this.state.factories.map(factory => (
               <div key={factory.id} className="col-sm-12 col-md-4 col-lg-3">
-                <Link to={`/factory?id=${factory.id}`}>
+                <Link to={`/factory/${factory.id}`}>
                   <div className="card text-white bg-success mb-3">
                     <div className="card-header">{factory.name}</div>
                     <div className="card-body">

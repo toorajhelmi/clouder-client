@@ -1,38 +1,55 @@
-import React, {Component} from 'react';
-import axios from 'axios';
+import * as React from 'react';
+import Palette from './Palette'
+import Desginer from './Designer'
+import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 
-class Factory extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      factory: null
-    };
-  }
-
-  async componentDidMount() {
-    const { match: { params } } = this.props;
-    var url = `http://localhost:7071/api/Factory_Get?id=${params.id}`;
-    const factory = (await axios.get(url)).data;
-    this.setState({
-      factory
-    });
-  }
-
-  render() {
-    const {factory} = this.state;
-    if (factory === null) return <p>Loading ...</p>;
-    return (
-      <div className="container">
-        <div className="row">
-          <div className="jumbotron col-12">
-            <h1 className="display-3">{factory.name}</h1>
-            <p className="lead">{factory.description}</p>
-            <hr className="my-4" />
-          </div>
-        </div>
-      </div>
-    )
-  }
+const toolStyle = {
+    marginRight: "10px"
 }
 
-export default Factory;
+export default class Designer extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            sidebar: null,
+        };
+    }
+    render() {
+        return (
+            <div style={{ width: "100%", marginTop: "70px" }}>
+                <div>
+                    <div style={{ width: "300px", float: "left" }}> <Palette /></div>
+                    <div style={{ marginLeft: "300px" }}> <Desginer /> </div>
+                </div>
+                <nav className="navbar fixed-bottom navbar-light bg-light">
+                    <span/>
+                    <div>
+                        <ButtonComponent cssClass='e-info' style={toolStyle}>Deploy</ButtonComponent>
+                        <ButtonComponent cssClass='e-info' style={toolStyle}>Export</ButtonComponent>
+                        <ButtonComponent cssClass='e-success' style={toolStyle}>Publish</ButtonComponent>
+                    </div>
+                </nav>
+            </div>
+        )
+    }
+    toggleClick() {
+        this.sidebar.toggle();
+    }
+}
+
+/* COuld not control openning and closing so for now decided to use a simple div
+ <SidebarComponent id="dockBar" ref={Sidebar => this.sidebar = Sidebar} dockSize="50px" width="300px" style={{ marginTop: "70px" }} >
+                        <div className="dock">
+                            <span id="toggle" margin="20px" onClick={this.toggleClick.bind(this)} >
+                                <span className="e-icons expand"> &lt; </span>
+                            </span>
+                            <span className="sidebar-item">
+                                <Palette />
+                            </span>
+                        </div>
+                    </SidebarComponent>
+
+                    <div id="main-content container-fluid col-md-12" style={{ marginTop: "70px"}}>
+                        <Desginer />
+                    </div> */

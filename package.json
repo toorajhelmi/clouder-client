@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@syncfusion/ej2-diagrams": "^16.4.54",
+    "@syncfusion/ej2-react-buttons": "^16.4.53",
+    "@syncfusion/ej2-react-diagrams": "^16.4.54",
+    "@syncfusion/ej2-react-layouts": "^16.4.54",
+    "@syncfusion/ej2-react-navigations": "^16.4.54",
     "auth0-js": "^9.10.0",
     "axios": "^0.18.0",
     "for": "^0.1.0",
