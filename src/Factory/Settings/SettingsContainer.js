@@ -7,15 +7,13 @@ export default class SettingsContainer extends Component {
     constructor(props) {
         super(props);
         this.getSettingsComponent = this.getSettingsComponent.bind(this);
-        this.state = {
-            settings: new Map()
-        }
+        this.reset = this.reset.bind(this);
+        this.cancel = this.cancel.bind(this);
+        this.state = { settingsCopy: new Map() }
+    }
 
-        this.setProperty = this.setProperty.bind(this);
-        // if (props.settings) {
-        //     this.state.settings.set("id", props.settings.get("id"));
-        //     this.state.settings.set("type", props.settings.get("type"));
-        // }
+    componentWillReceiveProps(props) {
+        this.reset(props.settings);
     }
 
     getSettingsComponent() {
@@ -23,13 +21,10 @@ export default class SettingsContainer extends Component {
             return null;
 
         switch (this.props.settings.get("type")) {
-            case "SQL": return <SqlSettings settings={this.props.settings} setProperty={this.setProperty} />;
+            case "SQL":
+                return <SqlSettings settings={this.state.settingsCopy} compId={this.props.settings.get("id")} />;
             default: return null;
         }
-    }
-
-    setProperty(key, value) {
-        this.props.settings.set(key, value);
     }
 
     render() {
@@ -43,16 +38,25 @@ export default class SettingsContainer extends Component {
                             </div>
                         </div>
                         <div className="row">
-                            <ButtonComponent className="col-5" style={{ margin: "15px" }} cssClass='e-success' onClick={e => this.props.doneConfigure(this.props.settings)}>SAVE</ButtonComponent>
-                            <ButtonComponent className="col-5" style={{ margin: "15px" }} cssClass='e-danger' onClick={this.props.cancelConfigure}>CANCEL</ButtonComponent>
+                            <ButtonComponent className="col-5" style={{ margin: "15px" }} cssClass='e-success' onClick={e => this.props.doneConfigure(this.state.settingsCopy)}>SAVE</ButtonComponent>
+                            <ButtonComponent className="col-5" style={{ margin: "15px" }} cssClass='e-danger' onClick={this.cancel}>CANCEL</ButtonComponent>
                         </div>
                     </div>
                 </div>
             </SidebarComponent>);
     }
 
-    addSettings(key, value) {
-        this.props.settings.set(key, value);
+    reset(settings) {
+        this.setState({ settingsCopy: new Map(settings)});
     }
 
+    cancel() {
+        this.reset(this.props.settings); 
+        this.props.cancelConfigure();
+    }
+
+    // updateSettings = (newSettings) =>
+    // {
+    //     this.setState({ settings : newSettings});
+    // }
 }

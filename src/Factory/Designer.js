@@ -5,14 +5,13 @@ import Diagram from './Diagram'
 export default class Designer extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-
-        };
+        this.getDiagram = this.getDiagram.bind(this); 
     }
+
     headerText = [{ text: "Diagram" }, { text: "Code" }];
+    
     getDiagram() {
-        return <Diagram />
+        return <Diagram persist={this.props.persist}/>
     }
 
     render() {
