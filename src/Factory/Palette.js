@@ -166,6 +166,11 @@ export default class Palette extends React.Component {
 
         return connectorSymbols;
     }
+
+    shouldComponentUpdate(_, __) {
+        return false;
+    }
+
     render() {
         return <SymbolPaletteComponent id="diagram1" width="300px" expandMode={"Multiple"}
             palettes={

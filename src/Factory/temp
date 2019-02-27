@@ -90,10 +90,6 @@ export default class Diagram extends React.Component {
             width: 12, height: 12, shape: 'Circle',
         }]
 
-    shouldComponentUpdate(_, __) {
-        return false;
-    }
-    
     render() {
         return (
             <div>
@@ -192,18 +188,7 @@ export default class Diagram extends React.Component {
     }
 
     persistNodesAndGraph() {
-        const mapToObj = m => {
-            return Array.from(m).reduce((obj, [key, value]) => {
-                obj[key] = value;
-                return obj;
-            }, {});
-        };
-
-        var nodesList = [];
-        this.nodesSettings.forEach((v, k, m) => {
-            nodesList.push(mapToObj(v));
-        });
-
+        this.persistNodes();
         var diagramElement = document.getElementById('diagram');
         var diagram = diagramElement.ej2_instances[0];
 
