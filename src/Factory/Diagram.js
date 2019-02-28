@@ -38,6 +38,7 @@ export default class Diagram extends React.Component {
         this.state = {
             configuringComponent: false,
             selectedNodeId: "",
+            configureNodeId: "",
             lastSaved: ""
         }
         this.configure = this.configure.bind(this);
@@ -50,6 +51,7 @@ export default class Diagram extends React.Component {
         this.persistNodesAndGraph = this.persistNodesAndGraph.bind(this);
         this.connectionChanged = this.connectionChanged.bind(this);
         this.setConfigure = this.setConfigure.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     nodesSettings = new Map();
@@ -95,7 +97,7 @@ export default class Diagram extends React.Component {
     //This is good to have since diagram gets update everytime the props change, however,
     //having it makes the configure button enabling stop working.
     // shouldComponentUpdate(nextProps, __) {
-    //     return this.props.selectedNodeId !== nextProps.selectedNodeId;
+    //     return this.props.configureNodeId !== nextProps.configureNodeId;
     // }
     
     render() {
@@ -103,9 +105,9 @@ export default class Diagram extends React.Component {
             <div>
                 <nav className="navbar top navbar-light bg-light">
                     <div>
-                        <ButtonComponent cssClass='e-info' style={toolStyle} onClick={this.configure} disabled={!this.state.selectedNodeId}>Configure</ButtonComponent>
+                        <ButtonComponent cssClass='e-info' style={toolStyle} onClick={this.configure} disabled={!this.state.configureNodeId}>Configure</ButtonComponent>
                         <ButtonComponent cssClass='e-info' style={toolStyle} disabled={!this.state.selectedNodeId}>Clone</ButtonComponent>
-                        <ButtonComponent cssClass='e-danger' style={toolStyle} disabled={!this.state.selectedNodeId}>Delete</ButtonComponent>
+                        <ButtonComponent cssClass='e-danger' style={toolStyle} onClick={this.delete} disabled={!this.state.selectedNodeId}>Delete</ButtonComponent>
                     </div>
                 </nav>
                 <div>
@@ -137,8 +139,27 @@ export default class Diagram extends React.Component {
 
     setSelected(e) {
         if (e.newValue && e.newValue.length === 1) {
+            this.setState({ selectedNodeId: e.newValue[0]});
             this.setConfigure(e.newValue[0]);
         }
+    }
+
+    delete() {
+        var diagramElement = document.getElementById('diagram');
+        var diagram = diagramElement.ej2_instances[0];
+        diagram.remove(this.state.selectedNodeId);
+        this.setState({ selectedNodeId: ""});
+        this.setState({ configureNodeId: ""});
+    }
+
+    clone() {
+        //To do
+       // var diagramElement = document.getElementById('diagram');
+       // var diagram = diagramElement.ej2_instances[0];
+
+       // diagram.remove(this.state.selectedNodeId);
+       // this.setState({ selectedNodeId: ""});
+       // this.setState({ configureNodeId: ""});
     }
 
     connectionChanged(e) {         
@@ -160,10 +181,10 @@ export default class Diagram extends React.Component {
         }
 
         if (canConfigure) {
-            this.setState({ selectedNodeId: selected.id });
+            this.setState({ configureNodeId: selected.id });
         }
         else {
-            this.setState({ selectedNodeId: "" })
+            this.setState({ configureNodeId: "" })
         }
     }
 
@@ -192,7 +213,7 @@ export default class Diagram extends React.Component {
         if (!this.nodesSettings)
             return null;
 
-        return this.nodesSettings.get(this.state.selectedNodeId);
+        return this.nodesSettings.get(this.state.configureNodeId);
     }
 
     //BUG: this is called twice per node addition. Fix it

@@ -11,11 +11,13 @@ export default class SqlStatementSettings extends Component {
             dbScript: '', tempDbScript: '',
             statementType: '',
             returnType: '',
+            outputName: '',
             showEditor: false
         }
 
         this.updateStatementType = this.updateStatementType.bind(this);
         this.updateReturnType = this.updateReturnType.bind(this);
+        this.updateOutputName = this.updateOutputName.bind(this);
         this.refreshState = this.refreshState.bind(this);
         this.showEditor = this.showEditor.bind(this);
         this.cancelEditor = this.cancelEditor.bind(this);
@@ -30,6 +32,32 @@ export default class SqlStatementSettings extends Component {
     }
 
     render() {
+        var returnSelection = null;
+        if (this.state.statementType === "Select") {
+            returnSelection =
+                <div className="form-group">
+                    <label>Return Type:</label>
+                    <DropDownListComponent
+                        dataSource={this.returnTypes}
+                        placeholder="Select a return type."
+                        value={this.state.returnType}
+                        change={e => { this.updateReturnType(e.value) }}
+                        disabled={this.state.statementType !== 'Select'} />
+                </div>
+        }
+        var outputSelection = null;
+        if (this.state.statementType === "Select" || this.state.statementType === "Insert") {
+            outputSelection =
+                <div className="form-group">
+                    <label>Output Variable Name:</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Give output a name."
+                        value={this.state.outputName}
+                        onChange={e => { this.updateOutputName(e.target.value) }} />
+                </div>
+        }
         return (
             <div>
                 <div className="card bg-info mb-3" style={{ border: "none" }}>
@@ -42,17 +70,12 @@ export default class SqlStatementSettings extends Component {
                                 placeholder="Select a statement type."
                                 value={this.state.statementType}
                                 change={e => { this.updateStatementType(e.value) }} />
-                            <DropDownListComponent
-                                dataSource={this.returnTypes}
-                                placeholder="Select a return type."
-                                value={this.state.returnType}
-                                change={e => { this.updateReturnType(e.value) }}
-                                disabled={this.state.statementType !== 'Select'} />
                         </div>
+                        {returnSelection}
+                        {outputSelection}
                         <div className="form-group">
                             <button className='e-control e-btn e-info' onClick={this.showEditor}>Define Tables</button>
                         </div>
-                        
                     </div>
                 </div>
                 <SidebarComponent isOpen={this.state.showEditor} type="Over" width="100%" position="Right" target="diagram" showBackdrop="false">
@@ -86,13 +109,14 @@ export default class SqlStatementSettings extends Component {
                         </div>
                     </div>
                 </SidebarComponent>
-            </div>);
+            </div >);
     }
 
     refreshState = (settings) => {
         this.setState({ dbScript: settings.has('dbScript') ? settings.get('dbScript') : '' });
         this.setState({ statementType: settings.has('statementType') ? settings.get('statementType') : '' });
         this.setState({ returnType: settings.has('returnType') ? settings.get('returnType') : '' });
+        this.setState({ outputName: settings.has('outputName') ? settings.get('outputName') : '' });
     }
 
     updateStatementType(newValue) {
@@ -103,6 +127,11 @@ export default class SqlStatementSettings extends Component {
     updateReturnType(newValue) {
         this.setState({ returnType: newValue });
         this.props.settings.set('returnType', newValue);
+    }
+
+    updateOutputName(newValue) {
+        this.setState({ outputName: newValue });
+        this.props.settings.set('outputName', newValue);
     }
 
     showEditor() {

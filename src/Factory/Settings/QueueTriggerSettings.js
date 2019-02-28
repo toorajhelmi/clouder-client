@@ -50,7 +50,7 @@ export default class QueueTriggerSettings extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Input Name:</label>
+                        <label>Input Variable Name:</label>
                         <input
                             type="text"
                             className="form-control"
