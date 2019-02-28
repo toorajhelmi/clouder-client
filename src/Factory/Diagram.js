@@ -25,11 +25,11 @@ let pageSettings = {
     orientation: 'Landscape',
     showPageBreaks: true,
     multiplePage: true,
-    background: {
-        color: 'black'
-    },
-    width: 2000,
-    height: 2000,
+    // background: {
+    //     color: 'black'
+    // },
+    //width: 2000,
+    //height: 2000,
 }
 
 export default class Diagram extends React.Component {
@@ -90,9 +90,11 @@ export default class Diagram extends React.Component {
             width: 12, height: 12, shape: 'Circle',
         }]
 
-    shouldComponentUpdate(_, __) {
-        return false;
-    }
+    //This is good to have since diagram gets update everytime the props change, however,
+    //having it makes the configure button enabling stop working.
+    // shouldComponentUpdate(nextProps, __) {
+    //     return this.props.selectedNodeId !== nextProps.selectedNodeId;
+    // }
     
     render() {
         return (
@@ -105,7 +107,7 @@ export default class Diagram extends React.Component {
                     </div>
                 </nav>
                 <div>
-                    <div>
+                    <div id="diagramContainer">
                         <DiagramComponent id="diagram" width="100%" height="800px" pageSettings={pageSettings} canAutoScroll="false"
                             selectionChange={this.setSelected} drop={this.addNode} collectionChange={this.persistNodes} connectionChange={this.persistNodesAndGraph} positionChange={this.persistNodes}>
                             <Inject services={[BpmnDiagrams]} />
@@ -147,7 +149,7 @@ export default class Diagram extends React.Component {
 
         //using node id as the default for componentName. Syncfusion generates a nice
         //unique name off of the comp type.
-        nodeSettings.set("componentName", addedNode.id);
+        nodeSettings.set("componentName", addedNode.id.replace(/\s+/g, ''));
         nodeSettings.set("type", addedNode.oldProperties.id);
 
         this.nodesSettings.set(addedNode.id, nodeSettings);

@@ -8,7 +8,7 @@ export default class Designer extends React.Component {
         this.getDiagram = this.getDiagram.bind(this); 
     }
 
-    headerText = [{ text: "Diagram" }, { text: "Code" }];
+    headerText = [{ text: "Diagram" }, { text: "CADL" }];
     
     getDiagram() {
         return <Diagram persist={this.props.persist}/>

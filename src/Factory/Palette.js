@@ -29,7 +29,7 @@ export default class Palette extends React.Component {
     getTriggerShapes() {
         let triggerShapes = [
             {
-                id: 'Timer',
+                id: 'Timer Trigger',
                 shape: {
                     type: 'Bpmn',
                     event: {
@@ -39,7 +39,7 @@ export default class Palette extends React.Component {
                 },
             },
             {
-                id: 'Queue',
+                id: 'Queue Trigger',
                 shape: {
                     type: 'Bpmn',
                     event: {

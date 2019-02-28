@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 
-export default class TimerTriggerSettings extends Component {
+export default class QueueTriggerSettings extends Component {
     constructor() {
         super();
         this.state = {
             componentName: '',
             functionName: '',
-            timerPeriod: 60,
+            inputName: '',
             size: '',
         }
 
         this.refreshState = this.refreshState.bind(this);
         this.updateComponentName = this.updateComponentName.bind(this);
         this.updateFunctionName = this.updateFunctionName.bind(this);
-        this.updateTimerPeriod = this.updateTimerPeriod.bind(this);
+        this.updateInputName = this.updateInputName.bind(this);
         this.updateSize = this.updateSize.bind(this);
     }
 
@@ -27,7 +27,7 @@ export default class TimerTriggerSettings extends Component {
     render() {
         return (
             <div className="card bg-info mb-3" style={{ border: "none" }}>
-                <div className="card-header" style={{ color: "white" }}>Timer Trigger Settings</div>
+                <div className="card-header" style={{ color: "white" }}>Queue Trigger Settings</div>
                 <div className="card-body text-left" style={{ backgroundColor: "white" }}>
                     <div className="form-group">
                         <label>Component Name:</label>
@@ -50,13 +50,13 @@ export default class TimerTriggerSettings extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Timer Period (Seconds):</label>
+                        <label>Input Name:</label>
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="Period in seconds to trigger the timer."
-                            value={this.state.timerPeriod}
-                            onChange={e => { this.updateTimerPeriod(e.target.value) }}
+                            placeholder="Give input a name."
+                            value={this.state.inputName}
+                            onChange={e => { this.updateInputName(e.target.value) }}
                         />
                     </div>
                     <div className="form-group">
@@ -74,7 +74,7 @@ export default class TimerTriggerSettings extends Component {
     refreshState = (settings) => {
         this.setState({ componentName: settings.has('componentName') ? settings.get('componentName') : '' });
         this.setState({ functionName: settings.has('functionName') ? settings.get('functionName') : '' });
-        this.setState({ timerPeriod: settings.has('timerPeriod') ? settings.get('timerPeriod') : '' });
+        this.setState({ inputName: settings.has('inputName') ? settings.get('inputName') : '' });
         this.setState({ size: settings.has('size') ? settings.get('size') : '' });
     }
 
@@ -88,9 +88,9 @@ export default class TimerTriggerSettings extends Component {
         this.props.settings.set('functionName', newValue);
     }
 
-    updateTimerPeriod(newValue) {
-        this.setState({ timerPeriod: newValue });
-        this.props.settings.set('timerPeriod', newValue);
+    updateInputName(newValue) {
+        this.setState({ inputName: newValue });
+        this.props.settings.set('inputName', newValue);
     }
 
     updateSize(newValue) {
