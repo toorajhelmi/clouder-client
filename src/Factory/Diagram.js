@@ -48,6 +48,8 @@ export default class Diagram extends React.Component {
         this.getSelectedNodeSettings = this.getSelectedNodeSettings.bind(this);
         this.persistNodes = this.persistNodes.bind(this);
         this.persistNodesAndGraph = this.persistNodesAndGraph.bind(this);
+        this.connectionChanged = this.connectionChanged.bind(this);
+        this.setConfigure = this.setConfigure.bind(this);
     }
 
     nodesSettings = new Map();
@@ -109,7 +111,7 @@ export default class Diagram extends React.Component {
                 <div>
                     <div id="diagramContainer">
                         <DiagramComponent id="diagram" width="100%" height="800px" pageSettings={pageSettings} canAutoScroll="false"
-                            selectionChange={this.setSelected} drop={this.addNode} collectionChange={this.persistNodes} connectionChange={this.persistNodesAndGraph} positionChange={this.persistNodes}>
+                            selectionChange={this.setSelected} drop={this.addNode} collectionChange={this.persistNodes} connectionChange={e => this.connectionChanged(e)} positionChange={this.persistNodes}>
                             <Inject services={[BpmnDiagrams]} />
                         </DiagramComponent>
                         <OverviewComponent id="overview" style={overviewStyle} sourceID="diagram" width={"200px"} height={"200px"} />
@@ -135,7 +137,30 @@ export default class Diagram extends React.Component {
 
     setSelected(e) {
         if (e.newValue && e.newValue.length === 1) {
-            this.setState({ selectedNodeId: e.newValue[0].id });
+            this.setConfigure(e.newValue[0]);
+        }
+    }
+
+    connectionChanged(e) {         
+        this.setConfigure(e.connector);
+        this.persistNodesAndGraph();
+    }
+
+    setConfigure(selected) {
+        var canConfigure = false;
+
+        if (selected.propName === "connectors") { //only allow config on arrows connected to DBs
+            if ((selected.sourceID && selected.sourceID.includes("SQL")) |
+                (selected.targetID && selected.targetID.includes("SQL"))) {
+                canConfigure = true;
+            }
+        }
+        else { //Can config all other elements
+            canConfigure = true;
+        }
+
+        if (canConfigure) {
+            this.setState({ selectedNodeId: selected.id });
         }
         else {
             this.setState({ selectedNodeId: "" })

@@ -6,6 +6,8 @@ import QueueSettings from './QueueSettings'
 import RequestTriggerSettings from './RequestTriggerSettings'
 import QueueTriggerSettings from './QueueTriggerSettings'
 import TimerTriggerSettings from './TimerTriggerSettings'
+import SqlStatementSettings from './SqlStatementSettings'
+
 export default class SettingsContainer extends Component {
     constructor(props) {
         super(props);
@@ -48,6 +50,11 @@ export default class SettingsContainer extends Component {
             case "Timer Trigger":
                 return <TimerTriggerSettings
                     settings={this.state.settingsCopy} />;
+            case "Straight":
+            case "Orthogonal":
+                return <SqlStatementSettings
+                    settings={this.state.settingsCopy} 
+                    expand={this.expand} unexpand={this.unexpand} />;
             default: return null;
         }
     }
