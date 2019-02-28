@@ -18,8 +18,15 @@ export default class Palette extends React.Component {
             {
                 id: 'No-SQL',
                 shape: {
-                    type: 'Bpmn',
-                    shape: 'DataObject'
+                    type: 'Flow',
+                    shape: 'MultiDocument'
+                }
+            },
+            {
+                id: 'Queue',
+                shape: {
+                    type: 'Flow',
+                    shape: 'DirectData'
                 }
             },
         ];
@@ -69,6 +76,13 @@ export default class Palette extends React.Component {
                 shape: {
                     type: 'Bpmn',
                     shape: 'Message'
+                }
+            },
+            {
+                id: 'Code',
+                shape: {
+                    type: 'Flow',
+                    shape: 'Decision'
                 }
             },
             {

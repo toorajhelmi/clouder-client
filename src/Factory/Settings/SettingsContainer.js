@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { SidebarComponent } from '@syncfusion/ej2-react-navigations';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 import SqlSettings from './SqlSettings'
+import QueueSettings from './QueueSettings'
 import RequestTriggerSettings from './RequestTriggerSettings'
 import QueueTriggerSettings from './QueueTriggerSettings'
 import TimerTriggerSettings from './TimerTriggerSettings'
@@ -35,6 +36,9 @@ export default class SettingsContainer extends Component {
                     settings={this.state.settingsCopy}
                     compId={this.props.settings.get("id")}
                     expand={this.expand} unexpand={this.unexpand} />;
+            case "Queue":
+                return <QueueSettings
+                    settings={this.state.settingsCopy} />
             case "HTTP Request":
                 return <RequestTriggerSettings
                     settings={this.state.settingsCopy} />;
