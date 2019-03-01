@@ -37,38 +37,100 @@ export default class Palette extends React.Component {
         let triggerShapes = [
             {
                 id: 'Timer Trigger',
-                shape: {
+                shape:   {
                     type: 'Bpmn',
-                    event: {
-                        event: 'Start',
-                        trigger: 'Timer'
-                    }
+                    shape: 'Activity',
+                    activity: {
+                        activity: 'Task',
+                        task: {
+                            loop: 'Standard'
+                        }
+                    },
                 },
             },
             {
                 id: 'Queue Trigger',
-                shape: {
+                shape:  {
                     type: 'Bpmn',
-                    event: {
-                        event: 'Start',
-                        trigger: 'Conditional'
-                    }
+                    shape: 'Activity',
+                    activity: {
+                        activity: 'SubProcess',
+                        subProcess: {
+                            collapsed: true,
+                        }
+                    },
                 },
             },
             {
                 id: 'HTTP Request',
-                shape: {
+                shape:   {
                     type: 'Bpmn',
-                    event: {
-                        event: 'Start',
-                        trigger: 'Error'
+                    shape: 'Activity',
+                    activity: {
+                        activity: 'Task',
+                        task: {
+                            type: 'User'
+                        }
                     }
-                },
+                }
             }
         ];
 
         return triggerShapes;
     }
+
+    getFlowShapes() {
+        let flowShapes = [
+            {
+                id: 'If',
+                shape: {
+                    type: 'Flow',
+                    shape: 'Decision'
+                }
+            },
+            {
+                id: 'Else',
+                shape: {
+                    type: 'Flow',
+                    shape: 'Sort'
+                }
+            },
+            {
+                id: 'End If',
+                shape: {
+                    type: 'Flow',
+                    shape: 'Or'
+                }
+            },
+            {
+                id: 'Iterate',
+                shape: {
+                    type: 'Bpmn',
+                    event: {
+                        event: 'None',
+                        trigger: 'Intermediate'
+                    }
+                },
+            },
+            {
+                id: 'New Variable',
+                shape: {
+                    type: 'Basic',
+                    shape: 'Plus'
+                }
+            },
+            {
+                id: 'Code',
+                shape: {
+                    type: 'Flow',
+                    shape: 'Card'
+                }
+            },
+        ];
+
+        return flowShapes;
+    }
+
     getActionShapes() {
         let actionShapes = [
             {
@@ -79,10 +141,10 @@ export default class Palette extends React.Component {
                 }
             },
             {
-                id: 'Code',
+                id: 'Return',
                 shape: {
                     type: 'Flow',
-                    shape: 'Decision'
+                    shape: 'Collate'
                 }
             },
             {
@@ -194,6 +256,12 @@ export default class Palette extends React.Component {
                     expanded: true,
                     symbols: this.getDataSourceShapes(),
                     title: 'Data Sources',
+                },
+                {
+                    id: 'flow',
+                    expanded: true,
+                    symbols: this.getFlowShapes(),
+                    title: 'Flow Control',
                 },
                 {
                     id: 'trigger',

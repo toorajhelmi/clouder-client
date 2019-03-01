@@ -8,6 +8,7 @@ export default class QueueTriggerSettings extends Component {
             componentName: '',
             functionName: '',
             inputName: '',
+            queue: '',
             size: '',
         }
 
@@ -15,6 +16,7 @@ export default class QueueTriggerSettings extends Component {
         this.updateComponentName = this.updateComponentName.bind(this);
         this.updateFunctionName = this.updateFunctionName.bind(this);
         this.updateInputName = this.updateInputName.bind(this);
+        this.updateQueue = this.updateQueue.bind(this);
         this.updateSize = this.updateSize.bind(this);
     }
 
@@ -50,6 +52,16 @@ export default class QueueTriggerSettings extends Component {
                         />
                     </div>
                     <div className="form-group">
+                        <label>Triggering Queue Name:</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Triggering queue name."
+                            value={this.state.queue}
+                            onChange={e => { this.updateQueue(e.target.value) }}
+                        />
+                    </div>
+                    <div className="form-group">
                         <label>Input Variable Name:</label>
                         <input
                             type="text"
@@ -74,6 +86,7 @@ export default class QueueTriggerSettings extends Component {
     refreshState = (settings) => {
         this.setState({ componentName: settings.has('componentName') ? settings.get('componentName') : '' });
         this.setState({ functionName: settings.has('functionName') ? settings.get('functionName') : '' });
+        this.setState({ queue: settings.has('queue') ? settings.get('queue') : '' });
         this.setState({ inputName: settings.has('inputName') ? settings.get('inputName') : '' });
         this.setState({ size: settings.has('size') ? settings.get('size') : '' });
     }
@@ -86,6 +99,11 @@ export default class QueueTriggerSettings extends Component {
     updateFunctionName(newValue) {
         this.setState({ functionName: newValue });
         this.props.settings.set('functionName', newValue);
+    }
+
+    updateQueue(newValue) {
+        this.setState({ queue: newValue });
+        this.props.settings.set('queue', newValue);
     }
 
     updateInputName(newValue) {

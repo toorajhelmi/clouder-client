@@ -4,7 +4,7 @@ import {
     Inject,
     BpmnDiagrams,
     OverviewComponent,
-    PortVisibility
+    PortVisibility,
 } from "@syncfusion/ej2-react-diagrams";
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 import SettingsContanier from './Settings/SettingsContainer'
@@ -56,43 +56,210 @@ export default class Diagram extends React.Component {
 
     nodesSettings = new Map();
 
-    ports = [
+    noInputTiggerPorts = [
         {
-            offset: { x: 0, y: 0.25 },
+            offset: { x: 1, y: 0 },
             visibility: PortVisibility.Visible,
             style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
             width: 12, height: 12, shape: 'Circle',
         },
         {
-            offset: { x: 0, y: 0.50 },
+            offset: { x: 1, y: 0.1 },
             visibility: PortVisibility.Visible,
             style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
             width: 12, height: 12, shape: 'Circle',
         },
         {
-            offset: { x: 0, y: 0.75 },
+            offset: { x: 1, y: 0.2 },
             visibility: PortVisibility.Visible,
             style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
             width: 12, height: 12, shape: 'Circle',
         },
         {
-            offset: { x: 1, y: 0.25 },
+            offset: { x: 1, y: 0.3 },
             visibility: PortVisibility.Visible,
             style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
             width: 12, height: 12, shape: 'Circle',
         },
         {
-            offset: { x: 1, y: 0.50 },
+            offset: { x: 1, y: 0.4 },
             visibility: PortVisibility.Visible,
             style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
             width: 12, height: 12, shape: 'Circle',
         },
         {
-            offset: { x: 1, y: 0.75 },
+            offset: { x: 1, y: 0.5 },
             visibility: PortVisibility.Visible,
             style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
             width: 12, height: 12, shape: 'Circle',
-        }]
+        },
+        {
+            offset: { x: 1, y: 0.6 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.7 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.8 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.9 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 1 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+    ]
+
+    withInputTiggerPorts = [
+        {
+            offset: { x: 0, y: 0.5 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.1 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.2 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.3 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.4 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.5 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.6 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.7 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.8 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.9 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 1 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+    ]
+
+    otherPorts = [
+        {
+            offset: { x: 0, y: 0.2 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 0, y: 0.4 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 0, y: 0.6 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 0, y: 0.8 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.2 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.4 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.6 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        },
+        {
+            offset: { x: 1, y: 0.8 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        }
+    ]
+
+    oneInputPorts = [
+        {
+            offset: { x: 0, y: 0.5 },
+            visibility: PortVisibility.Visible,
+            style: { fill: 'orange', strokeWidth: 2, strokeColor: 'white' },
+            width: 12, height: 12, shape: 'Circle',
+        }
+    ]
+
 
     //This is good to have since diagram gets update everytime the props change, however,
     //having it makes the configure button enabling stop working.
@@ -176,6 +343,10 @@ export default class Diagram extends React.Component {
                 canConfigure = true;
             }
         }
+
+        else if (selected.id.includes("Else") || selected.id.includes("End If") ) {
+            canConfigure = false;
+        }
         else { //Can config all other elements
             canConfigure = true;
         }
@@ -201,11 +372,41 @@ export default class Diagram extends React.Component {
         this.nodesSettings.set(addedNode.id, nodeSettings);
 
         if (addedNode.propName === "nodes") {
-            addedNode.width = 100;
-            addedNode.height = 100;
             var diagramElement = document.getElementById('diagram');
             var diagram = diagramElement.ej2_instances[0];
-            diagram.addPorts(addedNode, this.ports);
+
+            switch (addedNode.oldProperties.id)
+            {
+                case 'HTTP Request':
+                    diagram.addPorts(addedNode, this.withInputTiggerPorts); 
+                    addedNode.width = 40;
+                    addedNode.height = 200;
+                    break;
+                case 'Timer Trigger':
+                case 'Queue Trigger':
+                    diagram.addPorts(addedNode, this.noInputTiggerPorts); 
+                    addedNode.width = 40;
+                    addedNode.height = 200;
+                    break;
+                case 'Outgoing Email':
+                case 'Code':
+                case 'Return':
+                case 'HTTP Call':
+                case 'If':
+                case 'Else':
+                case 'End If':
+                case 'New Variable':
+                case 'Iterate':
+                    diagram.addPorts(addedNode, this.oneInputPorts); 
+                    addedNode.width = 50;
+                    addedNode.height = 50;
+                    break;
+                default:
+                    diagram.addPorts(addedNode, this.otherPorts); 
+                    addedNode.width = 100;
+                    addedNode.height = 100;
+                    break;
+            }     
         }
     }
 
@@ -272,8 +473,14 @@ export default class Diagram extends React.Component {
             
             graph.push({
                 source: c.sourceID + "-" + sourcePortIndex,
-                target: c.targetID + "-" + targetPortIndex
+                target: c.targetID + "-" + targetPortIndex,
+                connection: c.id
             })
         });
+
+        this.props.persist(
+            diagram.saveDiagram(),
+            JSON.stringify(nodesList),
+            graph);
     }
 }

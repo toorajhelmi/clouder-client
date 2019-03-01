@@ -37,7 +37,7 @@ export default class Designer extends React.Component {
                     <div style={{ marginLeft: "300px" }}> <Desginer persist={this.persist} /> </div>
                 </div>
                 <nav className="navbar fixed-bottom navbar-light bg-light">
-                    <StatusBar lastUpdated = {this.state.lastUpdated}/>
+                    <StatusBar lastUpdated={this.state.lastUpdated} />
                     <div>
                         <ButtonComponent cssClass='e-info' style={toolStyle}>Deploy</ButtonComponent>
                         <ButtonComponent cssClass='e-info' style={toolStyle}>Export</ButtonComponent>
@@ -52,14 +52,25 @@ export default class Designer extends React.Component {
     }
 
     async persist(nodes, nodeSettings, graph) {
-        this.factory = {
-            id: this.id,
-            diagram: nodes,
-            nodeSettings: nodeSettings,
-            graph: graph,
-            name: "",
-            description: ""
-        };
+        if (graph) {
+            this.factory = {
+                id: this.id,
+                diagram: nodes,
+                nodeSettings: nodeSettings,
+                graph: graph,
+            };
+        }
+        else if (this.factory) {
+            this.factory.nodes = nodes;
+            this.factory.nodeSettings = nodeSettings;
+        }
+        else {
+            this.factory = {
+                id: this.id,
+                diagram: nodes,
+                nodeSettings: nodeSettings
+            }
+        }
 
         this.factoryChanged = true;
     }

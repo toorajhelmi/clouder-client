@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { SidebarComponent } from '@syncfusion/ej2-react-navigations';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
+import { CheckBoxComponent } from '@syncfusion/ej2-react-buttons';
 import CodeInstructions from './CodeInstructions'
 
 export default class CodeSettings extends Component {
@@ -10,12 +11,16 @@ export default class CodeSettings extends Component {
             componentName: '',
             methodName: '',
             inputVariables: '',
+            hasOutput: true,
+            outputName: '',
             code: '', tempCode: '',
             showEditor: false
         }
 
         this.updateMethodName = this.updateMethodName.bind(this);
         this.updateInputVariables = this.updateInputVariables.bind(this);
+        this.updateOutputName = this.updateOutputName.bind(this);
+        this.updateHasOutput = this.updateHasOutput.bind(this);
         this.refreshState = this.refreshState.bind(this);
         this.showEditor = this.showEditor.bind(this);
         this.cancelEditor = this.cancelEditor.bind(this);
@@ -27,6 +32,19 @@ export default class CodeSettings extends Component {
     }
 
     render() {
+        var outputSelection = null;
+        if (this.state.hasOutput) {
+            outputSelection =
+                <div className="form-group">
+                    <label>Output Variable Name:</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Give output a name."
+                        value={this.state.outputName}
+                        onChange={e => { this.updateOutputName(e.target.value) }} />
+                </div>
+        }
         return (
             <div>
                 <div className="card bg-info mb-3" style={{ border: "none" }}>
@@ -47,12 +65,20 @@ export default class CodeSettings extends Component {
                                 <label>Input Variable Names:</label>
                                 <input
                                     type="text"
-                                    onChange={e => { this.inputVariables(e.target.value) }}
+                                    onChange={e => { this.updateInputVariables(e.target.value) }}
                                     className="form-control"
                                     placeholder="x, y, ..."
                                     value={this.state.inputVariables}
                                 />
                             </div>
+                            <div className="form-group">
+                                <CheckBoxComponent
+                                    label="Has return value"
+                                    change={e => { this.updateHasOutput(e.checked) }}
+                                    checked={this.state.hasOutput}
+                                    className="form-control" />
+                            </div>
+                            {outputSelection}
                         </div>
                         <div className="form-group">
                             <button className='e-control e-btn e-info' onClick={this.showEditor}>Define Method</button>
@@ -72,7 +98,7 @@ export default class CodeSettings extends Component {
                                                 <textarea
                                                     className="form-control z-depth-1"
                                                     rows="20"
-                                                    placeholder="Type tables definition here"
+                                                    placeholder="Type your code here"
                                                     value={this.state.tempCode}
                                                     onChange={e => { this.setState({ tempCode: e.target.value }) }} />
                                             </div>
@@ -97,6 +123,8 @@ export default class CodeSettings extends Component {
         this.setState({ methodName: settings.has('methodName') ? settings.get('methodName') : '' });
         this.setState({ inputVariables: settings.has('inputVariables') ? settings.get('inputVariables') : '' });
         this.setState({ code: settings.has('code') ? settings.get('code') : '' });
+        this.setState({ outputName: settings.has('outputName') ? settings.get('outputName') : '' });
+        this.setState({ hasOutput: settings.has('hasOutput') ? settings.get('hasOutput') : '' });
     }
 
     updateMethodName(newValue) {
@@ -104,9 +132,19 @@ export default class CodeSettings extends Component {
         this.props.settings.set('methodName', newValue);
     }
 
+    updateOutputName(newValue) {
+        this.setState({ outputName: newValue });
+        this.props.settings.set('outputName', newValue);
+    }
+
     updateInputVariables(newValue) {
         this.setState({ inputVariables: newValue });
         this.props.settings.set('inputVariables', newValue);
+    }
+
+    updateHasOutput(newValue) {
+        this.setState({ hasOutput: newValue });
+        this.props.settings.set('hasOutput', newValue);
     }
 
     updateSize(newValue) {
