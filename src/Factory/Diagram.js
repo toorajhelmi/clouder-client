@@ -5,6 +5,7 @@ import {
     BpmnDiagrams,
     OverviewComponent,
     PortVisibility,
+    PrintAndExport
 } from "@syncfusion/ej2-react-diagrams";
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 import SettingsContanier from './Settings/SettingsContainer'
@@ -57,6 +58,8 @@ export default class Diagram extends React.Component {
     }
 
     nodesSettings = new Map();
+
+    //#region Port Defintions
 
     noInputTiggerPorts = [
         {
@@ -262,6 +265,8 @@ export default class Diagram extends React.Component {
         }
     ]
 
+    //#endregion
+
     componentDidMount() {
         this.props.exportAsDiagramCommand.execute = exportAs => this.export(exportAs);
         this.props.loadFactoryCommand.execute = factory => this.load(factory);
@@ -292,7 +297,7 @@ export default class Diagram extends React.Component {
                     <div id="diagramContainer">
                         <DiagramComponent id="diagram" width="100%" height="800px" pageSettings={pageSettings} canAutoScroll="false"
                             selectionChange={this.setSelected} drop={this.addNode} collectionChange={this.persistNodes} connectionChange={e => this.connectionChanged(e)} positionChange={this.persistNodes}>
-                            <Inject services={[BpmnDiagrams]} />
+                            <Inject services={[BpmnDiagrams, PrintAndExport]} />
                         </DiagramComponent>
                         <OverviewComponent id="overview" style={overviewStyle} sourceID="diagram" width={"200px"} height={"200px"} />
                     </div>
@@ -429,6 +434,8 @@ export default class Diagram extends React.Component {
         return this.nodesSettings.get(this.state.configureNodeId);
     }
 
+    //#region persist & load
+
     //BUG: this is called twice per node addition. Fix it
     persistNodes() {
         const mapToObj = m => {
@@ -496,16 +503,31 @@ export default class Diagram extends React.Component {
             JSON.stringify(graph));
     }
 
-    export(exportAs) {
+    export(exportAs, fileName) {
         if (exportAs) {
             var diagramElement = document.getElementById('diagram');
             var diagram = diagramElement.ej2_instances[0];
-            let options = {
-                mode: 'Data',
-                format: exportAs === "PNG" ? "PNG" : "PDF"
-            };
-    
-            diagram.exportDiagram(options);
+
+            if (exportAs === "PNG") {
+                var options = {
+                    mode: 'Download',
+                    margin: { left: 10, right: 10, top: 10, bottom: 10 },
+                    fileName: fileName,
+                    format: 'PNG',
+                    region: 'Content',
+                };
+
+                diagram.exportDiagram(options);
+            }
+            else if (exportAs === "PDF") {
+                options = { 
+                    mode: 'Data',
+                    margin: { left: 10, right: 10, top: 10, bottom: 10 },
+                    region: 'Content',
+                    multiplePage: false,
+                };
+                diagram.print(options);
+            }
         }
     }
 
@@ -521,4 +543,6 @@ export default class Diagram extends React.Component {
             this.nodesSettings.set(settings.get('id'), settings);
         });
     }
+
+    //#endregion
 }

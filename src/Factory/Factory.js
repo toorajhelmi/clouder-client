@@ -56,14 +56,14 @@ export default class Factory extends React.Component {
         }
 
         return (
-            <div style={{ width: "100%", marginTop: "70px" }} id="factory">
+            <div style={{ width: "100%", height:"1000px", marginTop: "70px" }} id="factory">
                 <DialogComponent width='500px' target='#factory' isModal={true} visible={this.state.exportDialogVisibility} 
-                    overlayClick={this.onOverlayClick} BeforeOpenEventArgs={e => e.maxHeight="500px"}>
-                    <Export exportAsZip={this.exportAsZip} exportAsDiagram={exportAs => this.exportAsDiagramCommand.execute(exportAs)} 
+                    overlayClick={this.onOverlayClick}>
+                    <Export exportAsZip={this.exportAsZip} exportAsDiagram={exportAs => this.exportAsDiagramCommand.execute(exportAs, this.factory.name)} 
                         exportSelected={() => this.setState({exportDialogVisibility: false})}/>
                 </DialogComponent>
                 <DialogComponent width='500px' target='#factory' isModal={true} visible={this.state.importDialogVisibility} 
-                    overlayClick={this.onOverlayClick} BeforeOpenEventArgs={e => e.maxHeight="500px"}>
+                    overlayClick={this.onOverlayClick} BeforeOpenEventArgs={e => e.maxHeight="auto"}>
                     <Import import={file => this.import(file)}/>
                 </DialogComponent>
                 <div>
@@ -172,6 +172,7 @@ export default class Factory extends React.Component {
             this.factory.settings = importedFactory.settings;
             this.factory.diagram = importedFactory.diagram;
             this.factory.graph = importedFactory.graph;
+            this.setState({ factoryChanged: true});
         }
         catch (e) {
 
