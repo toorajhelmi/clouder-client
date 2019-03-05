@@ -96,7 +96,7 @@ export default class Palette extends React.Component {
                 }
             },
             {
-                id: 'End If',
+                id: 'End',
                 shape: {
                     type: 'Flow',
                     shape: 'Or'

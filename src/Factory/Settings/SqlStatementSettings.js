@@ -114,6 +114,7 @@ export default class SqlStatementSettings extends Component {
 
     refreshState = (settings) => {
         this.setState({ dbScript: settings.has('dbScript') ? settings.get('dbScript') : '' });
+        this.setState({ tempDbScript: settings.has('dbScript') ? settings.get('dbScript') : '' });
         this.setState({ statementType: settings.has('statementType') ? settings.get('statementType') : '' });
         this.setState({ returnType: settings.has('returnType') ? settings.get('returnType') : '' });
         this.setState({ outputName: settings.has('outputName') ? settings.get('outputName') : '' });
@@ -146,8 +147,9 @@ export default class SqlStatementSettings extends Component {
     }
 
     saveEditor() {
-        this.setState({ dbScript: this.state.tempdbScript });
+        this.setState({ dbScript: this.state.tempDbScript });
         this.setState({ showEditor: false });
+        this.props.settings.set('dbScript', this.state.tempDbScript); 
         this.props.unexpand();
     }
 }

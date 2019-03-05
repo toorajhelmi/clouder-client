@@ -14,7 +14,7 @@ class App extends Component {
       <div className="content" id="app">
         <NavBar />
         <Route exact path='/' component={Factories} />
-        <Route exact path='/factory/:id' component={Factory} />
+        <Route exact path='/factory' component={Factory}/>
         <Route exact path='/callback' component={Callback} />
         <SecuredRoute path='/new-factory' component={NewFactory} />
       </div>

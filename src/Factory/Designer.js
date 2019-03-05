@@ -1,5 +1,5 @@
-import { TabComponent, TabItemDirective, TabItemsDirective } from '@syncfusion/ej2-react-navigations';
 import * as React from 'react';
+import { TabComponent, TabItemDirective, TabItemsDirective } from '@syncfusion/ej2-react-navigations';
 import Diagram from './Diagram'
 
 export default class Designer extends React.Component {
@@ -11,7 +11,9 @@ export default class Designer extends React.Component {
     headerText = [{ text: "Diagram" }, { text: "CADL" }];
     
     getDiagram() {
-        return <Diagram persist={this.props.persist}/>
+        return <Diagram persist={this.props.persist} 
+            exportAsDiagramCommand={this.props.exportAsDiagramCommand}
+            loadFactoryCommand={this.props.loadFactoryCommand}/>
     }
 
     render() {

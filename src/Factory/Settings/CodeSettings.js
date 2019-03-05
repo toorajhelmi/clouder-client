@@ -166,6 +166,7 @@ export default class CodeSettings extends Component {
     saveEditor() {
         this.setState({ code: this.state.tempcode });
         this.setState({ showEditor: false });
+        this.props.settings.set('code', this.state.code); 
         this.props.unexpand();
     }
 }

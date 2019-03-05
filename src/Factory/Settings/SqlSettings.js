@@ -22,6 +22,7 @@ export default class SqlSettings extends Component {
         this.showEditor = this.showEditor.bind(this);
         this.cancelEditor = this.cancelEditor.bind(this);
         this.saveEditor = this.saveEditor.bind(this);
+        this.updateScript = this.updateScript.bind(this);
     }
 
     sizes = ['', 'Free', 'Small', 'Medium', 'Large'];
@@ -45,16 +46,16 @@ export default class SqlSettings extends Component {
                                 placeholder="Give component a name."
                                 value={this.state.componentName}
                             />
-                            <div className="form-group">
-                                <label>Database Name:</label>
-                                <input
-                                    type="text"
-                                    onChange={e => { this.updateDatabaseName(e.target.value) }}
-                                    className="form-control"
-                                    placeholder="Give database a name."
-                                    value={this.state.databaseName}
-                                />
-                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label>Database Name:</label>
+                            <input
+                                type="text"
+                                onChange={e => { this.updateDatabaseName(e.target.value) }}
+                                className="form-control"
+                                placeholder="Give database a name."
+                                value={this.state.databaseName}
+                            />
                         </div>
                         <div className="form-group">
                             <button className='e-control e-btn e-info' onClick={this.showEditor}>Define Tables</button>
@@ -84,7 +85,7 @@ export default class SqlSettings extends Component {
                                                     rows="20"
                                                     placeholder="Type tables definition here"
                                                     value={this.state.tempDbScript}
-                                                    onChange={e => { this.setState({ tempDbScript: e.target.value }) }} />
+                                                    onChange={e => this.updateScript(e.target.value)} />
                                             </div>
                                             <div magin="auto">
                                                 <ButtonComponent className="col-5 offset-1" style={{ marginRight: "15px" }} cssClass='e-success' onClick={this.saveEditor}>SAVE</ButtonComponent>
@@ -107,6 +108,7 @@ export default class SqlSettings extends Component {
         this.setState({ componentName: settings.has('componentName') ? settings.get('componentName') : '' });
         this.setState({ databaseName: settings.has('databaseName') ? settings.get('databaseName') : '' });
         this.setState({ dbScript: settings.has('dbScript') ? settings.get('dbScript') : '' });
+        this.setState({ tempDbScript: settings.has('dbScript') ? settings.get('dbScript') : '' });
         this.setState({ size: settings.has('size') ? settings.get('size') : '' });
     }
 
@@ -125,6 +127,10 @@ export default class SqlSettings extends Component {
         this.props.settings.set('size', newValue);
     }
 
+    updateScript(newValue) {
+        this.setState({ tempDbScript: newValue });
+    }
+
     showEditor() {
         this.setState({ showEditor: true });
         this.props.expand();
@@ -137,8 +143,9 @@ export default class SqlSettings extends Component {
     }
 
     saveEditor() {
-        this.setState({ dbScript: this.state.tempdbScript });
+        this.setState({ dbScript: this.state.tempDbScript });
         this.setState({ showEditor: false });
+        this.props.settings.set('dbScript', this.state.tempDbScript);    
         this.props.unexpand();
     }
 }

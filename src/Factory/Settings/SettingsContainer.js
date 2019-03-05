@@ -29,6 +29,8 @@ export default class SettingsContainer extends Component {
         this.unexpand = this.unexpand.bind(this);
     }
 
+    settings = null;
+    
     componentWillReceiveProps(props) {
         this.reset(props.settings);
     }

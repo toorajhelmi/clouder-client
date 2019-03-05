@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import auth0Client from '../Auth/Auth';
 import axios from 'axios';
 
@@ -12,33 +12,6 @@ class NewFactory extends Component {
       name: '',
       description: '',
     };
-  }
-
-  updateDescription(value) {
-    this.setState({
-      description: value,
-    });
-  }
-
-  updateName(value) {
-    this.setState({
-      name: value,
-    });
-  }
-
-  async submit() {
-    this.setState({
-      disabled: true,
-    });
-
-    await axios.post('http://localhost:7071/api/Factory_Create', {
-      name: this.state.name,
-      description: this.state.description,
-    }, {
-      headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
-    });
-
-    this.props.history.push('/');
   }
 
   render() {
@@ -54,7 +27,7 @@ class NewFactory extends Component {
                   <input
                     disabled={this.state.disabled}
                     type="text"
-                    onBlur={(e) => {this.updateName(e.target.value)}}
+                    onBlur={(e) => { this.setState({ name: e.target.value }) }}
                     className="form-control"
                     placeholder="Give your factory a name."
                   />
@@ -64,7 +37,7 @@ class NewFactory extends Component {
                   <input
                     disabled={this.state.disabled}
                     type="text"
-                    onBlur={(e) => {this.updateDescription(e.target.value)}}
+                    onBlur={(e) => { this.setState({ description: e.target.value }) }}
                     className="form-control"
                     placeholder="Give more context about the factory."
                   />
@@ -72,8 +45,8 @@ class NewFactory extends Component {
                 <button
                   disabled={this.state.disabled || !this.state.name || !this.state.description}
                   className="btn btn-primary"
-                  onClick={() => {this.submit()}}>
-                  Submit
+                  onClick={() => { this.submit() }}>
+                  Create
                 </button>
               </div>
             </div>
@@ -81,6 +54,22 @@ class NewFactory extends Component {
         </div>
       </div>
     )
+  }
+
+  async submit() {
+    this.setState({
+      disabled: true,
+    });
+
+    axios.post('http://localhost:7071/api/Factory_Add', {
+      name: this.state.name,
+      description: this.state.description}, {
+        headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
+    }).then(response =>
+      this.props.history.push({
+        pathname: '/factory',
+        state: { factory: response.data }
+      }));
   }
 }
 

@@ -33,13 +33,13 @@ let pageSettings = {
 }
 
 export default class Diagram extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             configuringComponent: false,
             selectedNodeId: "",
             configureNodeId: "",
-            lastSaved: ""
+            lastSaved: "",
         }
         this.configure = this.configure.bind(this);
         this.doneConfigure = this.doneConfigure.bind(this);
@@ -52,6 +52,8 @@ export default class Diagram extends React.Component {
         this.connectionChanged = this.connectionChanged.bind(this);
         this.setConfigure = this.setConfigure.bind(this);
         this.delete = this.delete.bind(this);
+        this.export = this.export.bind(this);
+        this.load = this.load.bind(this);
     }
 
     nodesSettings = new Map();
@@ -260,6 +262,15 @@ export default class Diagram extends React.Component {
         }
     ]
 
+    componentDidMount() {
+        this.props.exportAsDiagramCommand.execute = exportAs => this.export(exportAs);
+        this.props.loadFactoryCommand.execute = factory => this.load(factory);
+    }
+
+    componentWillUnmount() {
+        this.props.exportAsDiagramCommand.execute = null;
+        this.props.loadFactoryCommand.execute = null;
+    }
 
     //This is good to have since diagram gets update everytime the props change, however,
     //having it makes the configure button enabling stop working.
@@ -269,7 +280,7 @@ export default class Diagram extends React.Component {
     
     render() {
         return (
-            <div>
+            <div id="this">
                 <nav className="navbar top navbar-light bg-light">
                     <div>
                         <ButtonComponent cssClass='e-info' style={toolStyle} onClick={this.configure} disabled={!this.state.configureNodeId}>Configure</ButtonComponent>
@@ -298,6 +309,7 @@ export default class Diagram extends React.Component {
     doneConfigure(settings) {
         this.nodesSettings.set(settings.get('id'), settings);
         this.setState({ configuringComponent: false });
+        this.persistNodes();
     }
 
     cancelConfigure() {
@@ -394,7 +406,7 @@ export default class Diagram extends React.Component {
                 case 'HTTP Call':
                 case 'If':
                 case 'Else':
-                case 'End If':
+                case 'End':
                 case 'New Variable':
                 case 'Iterate':
                     diagram.addPorts(addedNode, this.oneInputPorts); 
@@ -481,6 +493,32 @@ export default class Diagram extends React.Component {
         this.props.persist(
             diagram.saveDiagram(),
             JSON.stringify(nodesList),
-            graph);
+            JSON.stringify(graph));
+    }
+
+    export(exportAs) {
+        if (exportAs) {
+            var diagramElement = document.getElementById('diagram');
+            var diagram = diagramElement.ej2_instances[0];
+            let options = {
+                mode: 'Data',
+                format: exportAs === "PNG" ? "PNG" : "PDF"
+            };
+    
+            diagram.exportDiagram(options);
+        }
+    }
+
+    load(factory) {
+        var diagramElement = document.getElementById('diagram');
+        var diagram = diagramElement.ej2_instances[0];
+        diagram.loadDiagram(factory.diagram);
+
+        this.nodesSettings.clear();
+        var nodeList = JSON.parse(factory.settings);
+        nodeList.forEach(SettingsObj => {
+            const settings = new Map(Object.entries(SettingsObj));
+            this.nodesSettings.set(settings.get('id'), settings);
+        });
     }
 }

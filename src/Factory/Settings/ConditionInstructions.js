@@ -5,7 +5,7 @@ const ConditionInstructions = () => {
         <pre>
         Specifiy the conditon that if met {"\n"}
         following actions before 'else' or {"\n"}
-        'endif' will run. {"\n"}
+        'end' will run. {"\n"}
         {"\n"}
         Example: {"\n"}
         {"\n"}
