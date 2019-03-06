@@ -537,7 +537,7 @@ export default class Diagram extends React.Component {
         diagram.loadDiagram(factory.diagram);
 
         this.nodesSettings.clear();
-        var nodeList = JSON.parse(factory.settings);
+        var nodeList = JSON.parse(factory.nodeSettings);
         nodeList.forEach(SettingsObj => {
             const settings = new Map(Object.entries(SettingsObj));
             this.nodesSettings.set(settings.get('id'), settings);

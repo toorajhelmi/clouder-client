@@ -13,9 +13,7 @@ class Factories extends Component {
 
   async componentDidMount() {
     const factories = (await axios.get('http://localhost:7071/api/User_Get')).data;
-    this.setState({
-      factories,
-    });
+    this.setState({factories});
   }
 
   render() {

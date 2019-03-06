@@ -27,8 +27,11 @@ export default class Factory extends React.Component {
         this.persistToBackend = this.persistToBackend.bind(this);
         this.onOverlayClick = this.onOverlayClick.bind(this);
         this.exportAsZip = this.exportAsZip.bind(this);
+        this.exportAsCadl = this.exportAsCadl.bind(this);
         this.import = this.import.bind(this);
         this.load = this.load.bind(this);
+        this.download = this.download.bind(this);
+        this.getCadl = this.getCadl.bind(this);
     }
 
     //Fields
@@ -46,8 +49,11 @@ export default class Factory extends React.Component {
         execute: null
     }
 
-    componentDidMount() {
-        setInterval(async () => { await this.persistToBackend() }, 60000);
+    async componentDidMount() {
+        setInterval(async () => { await this.persistToBackend() }, 1000);
+        const fullFactory = (await axios.get(`http://localhost:7071/api/factory_get?id=${this.factory.id}`)).data;
+        this.factory = fullFactory;
+        this.load(this.factory);
     }
     
     render() {       
@@ -59,7 +65,10 @@ export default class Factory extends React.Component {
             <div style={{ width: "100%", height:"1000px", marginTop: "70px" }} id="factory">
                 <DialogComponent width='500px' target='#factory' isModal={true} visible={this.state.exportDialogVisibility} 
                     overlayClick={this.onOverlayClick}>
-                    <Export exportAsZip={this.exportAsZip} exportAsDiagram={exportAs => this.exportAsDiagramCommand.execute(exportAs, this.factory.name)} 
+                    <Export 
+                        exportAsZip={this.exportAsZip} 
+                        exportAsDiagram={exportAs => this.exportAsDiagramCommand.execute(exportAs, this.factory.name)} 
+                        exportAsCadl={this.exportAsCadl}
                         exportSelected={() => this.setState({exportDialogVisibility: false})}/>
                 </DialogComponent>
                 <DialogComponent width='500px' target='#factory' isModal={true} visible={this.state.importDialogVisibility} 
@@ -73,7 +82,8 @@ export default class Factory extends React.Component {
                     <div style={{ marginLeft: "300px" }}> 
                         <Designer persist={this.persist} 
                             exportAsDiagramCommand={this.exportAsDiagramCommand}
-                            loadFactoryCommand={this.loadFactoryCommand}/>
+                            loadFactoryCommand={this.loadFactoryCommand}
+                            getCadl={this.getCadl}/>
                     </div>
                 </div>
                 <nav className="navbar fixed-bottom navbar-light bg-light">
@@ -109,7 +119,7 @@ export default class Factory extends React.Component {
     async persistToBackend() {
         if (this.notSaved) {
             this.notSaved = false;
-            await axios.post('http://localhost:7071/api/Factory_Update',
+            await axios.post('http://localhost:7071/api/factory_update',
                 this.factory);
 
             this.setState({ lastUpdated: (new Date()).toLocaleTimeString() });
@@ -124,19 +134,44 @@ export default class Factory extends React.Component {
     exportAsZip() {
         var jsZip = require("jszip");
         var zip = new jsZip();
-        var packageName = this.factory.name;
+        var download = this.download;
+        var fileName = this.factory.name + ".zip";
         zip.folder(this.factory.name)
             .file("settings.json", this.factory.nodeSettings)
             .file("diagram.json", this.factory.diagram)
             .file("graph.json", this.factory.graph);
         zip.generateAsync({type:"blob"}).then(function (blob) {
-            var url = URL.createObjectURL(blob);
+            download(blob, fileName)
+        });
+    }
+
+    async getCadl() {
+        if (this.notSaved) {
+            await this.persistToBackend();
+        }
+        const cadl = (await axios.get(`http://localhost:7071/api/cadl_get?id=${this.factory.id}`)).data;
+        return cadl;
+    }
+
+    async exportAsCadl() {
+        var fileName = this.factory.name + ".cadl";
+        var cadl = await this.getCadl();
+        var blob = new Blob([cadl], 
+        {
+            type : "text/plain;charset=utf-8"
+        });
+        
+        this.download(blob, fileName);
+    }
+
+    download(blob, fileName) {
+        var url = URL.createObjectURL(blob);
             var a = document.createElement('a');
-            a.download = packageName + ".zip";
+            a.download = fileName;
             a.href = url;
             a.textContent = "";
             a.click();
-        });
+        URL.revokeObjectURL(url);
     }
 
     async import(file) {
@@ -148,7 +183,7 @@ export default class Factory extends React.Component {
             Object.keys(zip.files).forEach(function (filename) {
                     zip.files[filename].async('string').then(function (fileData) {
                         if (filename.includes("settings.json")) {
-                            importedFactory.settings = fileData;
+                            importedFactory.nodeSettings = fileData;
                         }
                         else if (filename.includes("diagram.json")) {
                             importedFactory.diagram = fileData;
@@ -157,7 +192,7 @@ export default class Factory extends React.Component {
                             importedFactory.graph = fileData;
                         }  
                         
-                        if (importedFactory.settings && importedFactory.diagram && importedFactory.graph) {
+                        if (importedFactory.nodeSettings && importedFactory.diagram && importedFactory.graph) {
                             loadFactory(importedFactory);
                         }
                     });
@@ -169,7 +204,7 @@ export default class Factory extends React.Component {
         try {
             this.loadFactoryCommand.execute(importedFactory);
 
-            this.factory.settings = importedFactory.settings;
+            this.factory.nodeSettings = importedFactory.nodeSettings;
             this.factory.diagram = importedFactory.diagram;
             this.factory.graph = importedFactory.graph;
             this.setState({ factoryChanged: true});
