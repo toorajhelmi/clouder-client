@@ -269,12 +269,12 @@ export default class Diagram extends React.Component {
 
     componentDidMount() {
         this.props.exportAsDiagramCommand.execute = exportAs => this.export(exportAs);
-        this.props.loadFactoryCommand.execute = factory => this.load(factory);
+        this.props.loadDiagramCommand.execute = factory => this.load(factory);
     }
 
     componentWillUnmount() {
         this.props.exportAsDiagramCommand.execute = null;
-        this.props.loadFactoryCommand.execute = null;
+        this.props.loadDiagramCommand.execute = null;
     }
 
     //This is good to have since diagram gets update everytime the props change, however,

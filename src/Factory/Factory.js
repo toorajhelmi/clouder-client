@@ -17,7 +17,7 @@ export default class Factory extends React.Component {
         super(props);
 
         this.state = {
-            lastUpdated: 'Not Saved.',
+            lastSaved: 'Not Saved.',
             exportDialogVisibility: false,
             importDialogVisibility: false,
             factoryChanged: false
@@ -38,7 +38,8 @@ export default class Factory extends React.Component {
 
     factory = null;
     notSaved = false;
-    
+    diagramUpdatedAt = null;
+
     //Commands
 
     exportAsDiagramCommand = {
@@ -83,11 +84,13 @@ export default class Factory extends React.Component {
                         <Designer persist={this.persist} 
                             exportAsDiagramCommand={this.exportAsDiagramCommand}
                             loadFactoryCommand={this.loadFactoryCommand}
-                            getCadl={this.getCadl}/>
+                            getCadl={this.getCadl}
+                            diagramUpdatedAt={this.diagramUpdatedAt}
+                            factory={this.factory}/>
                     </div>
                 </div>
                 <nav className="navbar fixed-bottom navbar-light bg-light">
-                    <StatusBar lastUpdated={this.state.lastUpdated} />
+                    <StatusBar lastUpdated={this.state.lastSaved} />
                     <div>
                         <ButtonComponent cssClass='e-info' style={toolStyle} disabled={!this.state.factoryChanged}
                             onClick={e => this.setState({exportDialogVisibility: true})}>Export</ButtonComponent>
@@ -101,15 +104,21 @@ export default class Factory extends React.Component {
         )
     }
 
-    async persist(diagram, nodeSettings, graph) {
+    async persist(diagram, nodeSettings, graph, script) {
         if (diagram) {
             this.factory.diagram = diagram;
+            this.diagramUpdatedAt = (new Date()).toLocaleTimeString();
         }
         if (nodeSettings) {
             this.factory.nodeSettings = nodeSettings;
+            this.diagramUpdatedAt = (new Date()).toLocaleTimeString();
         }
         if (graph) {
             this.factory.graph = graph;
+            this.diagramUpdatedAt = (new Date()).toLocaleTimeString();
+        }
+        if (script) {
+            this.factory.script = script;
         }
 
         this.setState({ factoryChanged: true});
@@ -122,7 +131,7 @@ export default class Factory extends React.Component {
             await axios.post('http://localhost:7071/api/factory_update',
                 this.factory);
 
-            this.setState({ lastUpdated: (new Date()).toLocaleTimeString() });
+            this.setState({ lastSaved: (new Date()).toLocaleTimeString() });
         }
     }
 

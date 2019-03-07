@@ -6,20 +6,57 @@ import Editor from './Editor';
 export default class Designer extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            updateEditor: true
+        }
+
         this.getDiagram = this.getDiagram.bind(this); 
         this.getEditor = this.getEditor.bind(this);
+        this.tabSwitched = this.tabSwitched.bind(this);
     }
 
     headerText = [{ text: "Diagram" }, { text: "CADL" }];
     
+    //Commands
+
+    updateEditorCommand = {
+        execute: null
+    }
+
+    loadDiagramCommand = {
+        execute: null
+    }
+
+    loadEditorCommand = {
+        execute: null
+    }
+
+    componentDidMount() {
+        var loadDiagramCommand = this.loadDiagramCommand;
+        var loadEditorCommand = this.loadEditorCommand;
+        this.props.loadFactoryCommand.execute = factory => {
+            loadDiagramCommand.execute(factory);
+            loadEditorCommand.execute(factory.script);
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.loadFactoryCommand.execute = null;
+    }
+
     getDiagram() {
         return <Diagram persist={this.props.persist} 
             exportAsDiagramCommand={this.props.exportAsDiagramCommand}
-            loadFactoryCommand={this.props.loadFactoryCommand}/>
+            loadDiagramCommand={this.loadDiagramCommand}/>
     }
 
     getEditor() {
-        return <Editor getCadl={this.props.getCadl}/>
+        return <Editor persist={this.props.persist}
+            getCadl={this.props.getCadl} 
+            updateEditorCommand={this.updateEditorCommand}
+            loadEditorCommand={this.loadEditorCommand} //This is not called since Editor is not visible at the begginign
+            script={this.props.factory.script}/>
     }
 
     render() {
@@ -37,7 +74,9 @@ export default class Designer extends React.Component {
 
     tabSwitched(e) {
         if (e.selectingIndex === 1) { //CADL tab
-            
+            if (this.updateEditorCommand.execute) {
+                this.updateEditorCommand.execute(this.props.diagramUpdatedAt);
+            }
         }
     }
 }
