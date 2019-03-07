@@ -18,8 +18,15 @@ export default class Palette extends React.Component {
             {
                 id: 'No-SQL',
                 shape: {
-                    type: 'Bpmn',
-                    shape: 'DataObject'
+                    type: 'Flow',
+                    shape: 'MultiDocument'
+                }
+            },
+            {
+                id: 'Queue',
+                shape: {
+                    type: 'Flow',
+                    shape: 'DirectData'
                 }
             },
         ];
@@ -29,39 +36,101 @@ export default class Palette extends React.Component {
     getTriggerShapes() {
         let triggerShapes = [
             {
-                id: 'Timer',
-                shape: {
+                id: 'Timer Trigger',
+                shape:   {
                     type: 'Bpmn',
-                    event: {
-                        event: 'Start',
-                        trigger: 'Timer'
-                    }
+                    shape: 'Activity',
+                    activity: {
+                        activity: 'Task',
+                        task: {
+                            loop: 'Standard'
+                        }
+                    },
                 },
             },
             {
-                id: 'Queue',
-                shape: {
+                id: 'Queue Trigger',
+                shape:  {
                     type: 'Bpmn',
-                    event: {
-                        event: 'Start',
-                        trigger: 'Conditional'
-                    }
+                    shape: 'Activity',
+                    activity: {
+                        activity: 'SubProcess',
+                        subProcess: {
+                            collapsed: true,
+                        }
+                    },
                 },
             },
             {
                 id: 'HTTP Request',
-                shape: {
+                shape:   {
                     type: 'Bpmn',
-                    event: {
-                        event: 'Start',
-                        trigger: 'Error'
+                    shape: 'Activity',
+                    activity: {
+                        activity: 'Task',
+                        task: {
+                            type: 'User'
+                        }
                     }
-                },
+                }
             }
         ];
 
         return triggerShapes;
     }
+
+    getFlowShapes() {
+        let flowShapes = [
+            {
+                id: 'If',
+                shape: {
+                    type: 'Flow',
+                    shape: 'Decision'
+                }
+            },
+            {
+                id: 'Else',
+                shape: {
+                    type: 'Flow',
+                    shape: 'Sort'
+                }
+            },
+            {
+                id: 'End',
+                shape: {
+                    type: 'Flow',
+                    shape: 'Or'
+                }
+            },
+            {
+                id: 'Iterate',
+                shape: {
+                    type: 'Bpmn',
+                    event: {
+                        event: 'None',
+                        trigger: 'Intermediate'
+                    }
+                },
+            },
+            {
+                id: 'New Variable',
+                shape: {
+                    type: 'Basic',
+                    shape: 'Plus'
+                }
+            },
+            {
+                id: 'Code',
+                shape: {
+                    type: 'Flow',
+                    shape: 'Card'
+                }
+            },
+        ];
+
+        return flowShapes;
+    }
+
     getActionShapes() {
         let actionShapes = [
             {
@@ -69,6 +138,13 @@ export default class Palette extends React.Component {
                 shape: {
                     type: 'Bpmn',
                     shape: 'Message'
+                }
+            },
+            {
+                id: 'Return',
+                shape: {
+                    type: 'Flow',
+                    shape: 'Collate'
                 }
             },
             {
@@ -166,6 +242,11 @@ export default class Palette extends React.Component {
 
         return connectorSymbols;
     }
+
+    shouldComponentUpdate(_, __) {
+        return false;
+    }
+
     render() {
         return <SymbolPaletteComponent id="diagram1" width="300px" expandMode={"Multiple"}
             palettes={
@@ -175,6 +256,12 @@ export default class Palette extends React.Component {
                     expanded: true,
                     symbols: this.getDataSourceShapes(),
                     title: 'Data Sources',
+                },
+                {
+                    id: 'flow',
+                    expanded: true,
+                    symbols: this.getFlowShapes(),
+                    title: 'Flow Control',
                 },
                 {
                     id: 'trigger',

@@ -3,6 +3,9 @@
 @import "../node_modules/@syncfusion/ej2-react-navigations/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-layouts/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-react-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-inputs/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-dropdowns/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-popups/styles/material.css";
 
 body {
   margin-top: 70px;
@@ -35,6 +38,14 @@ body {
 
 body > #root > div {
   height: 100vh;
+}
+
+.wordwrap { 
+  white-space: pre-wrap;      /* CSS3 */   
+  white-space: -moz-pre-wrap; /* Firefox */    
+  white-space: -pre-wrap;     /* Opera <7 */   
+  white-space: -o-pre-wrap;   /* Opera 7 */    
+  word-wrap: break-word;      /* IE */
 }
 
 @keyframes App-logo-spin {

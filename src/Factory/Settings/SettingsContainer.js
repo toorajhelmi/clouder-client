@@ -1,17 +1,36 @@
 import React, { Component } from 'react';
-import SqlSettings from './SqlSettings'
 import { SidebarComponent } from '@syncfusion/ej2-react-navigations';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
+import SqlSettings from './SqlSettings'
+import QueueSettings from './QueueSettings'
+import RequestTriggerSettings from './RequestTriggerSettings'
+import QueueTriggerSettings from './QueueTriggerSettings'
+import TimerTriggerSettings from './TimerTriggerSettings'
+import SqlStatementSettings from './SqlStatementSettings'
+import CodeSettings from './CodeSettings'
+import IfSettings from './IfSettings'
+import VariableSettings from './VariableSettings'
+import IterateSettings from './IterateSettings'
+import ReturnSettings from './ReturnSettings'
 
 export default class SettingsContainer extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            settingsCopy: new Map(),
+            width: "400px"
+        }
+
         this.getSettingsComponent = this.getSettingsComponent.bind(this);
         this.reset = this.reset.bind(this);
         this.cancel = this.cancel.bind(this);
-        this.state = { settingsCopy: new Map() }
+        this.expand = this.expand.bind(this);
+        this.unexpand = this.unexpand.bind(this);
     }
 
+    settings = null;
+    
     componentWillReceiveProps(props) {
         this.reset(props.settings);
     }
@@ -22,18 +41,55 @@ export default class SettingsContainer extends Component {
 
         switch (this.props.settings.get("type")) {
             case "SQL":
-                return <SqlSettings settings={this.state.settingsCopy} compId={this.props.settings.get("id")} />;
-            default: return null;
+                return <SqlSettings
+                    settings={this.state.settingsCopy}
+                    compId={this.props.settings.get("id")}
+                    expand={this.expand} unexpand={this.unexpand} />;
+            case "Queue":
+                return <QueueSettings
+                    settings={this.state.settingsCopy} />
+            case "HTTP Request":
+                return <RequestTriggerSettings
+                    settings={this.state.settingsCopy} />;
+            case "Queue Trigger":
+                return <QueueTriggerSettings
+                    settings={this.state.settingsCopy} />;
+            case "Timer Trigger":
+                return <TimerTriggerSettings
+                    settings={this.state.settingsCopy} />;
+            case "If":
+                return <IfSettings
+                    settings={this.state.settingsCopy}/>;
+             case "New Variable":
+                return <VariableSettings
+                    settings={this.state.settingsCopy} />;
+            case "Code":
+                return <CodeSettings
+                    settings={this.state.settingsCopy}
+                    expand={this.expand} unexpand={this.unexpand} />;
+            case "Iterate":
+                return <IterateSettings
+                    settings={this.state.settingsCopy} />
+            case "Return":
+                return <ReturnSettings
+                    settings={this.state.settingsCopy} />
+            case "Straight":
+            case "Orthogonal":
+                return <SqlStatementSettings
+                    settings={this.state.settingsCopy}
+                    expand={this.expand} unexpand={this.unexpand} />;
+            default: 
+                return null;
         }
     }
 
     render() {
         return (
-            <SidebarComponent id="propeties-sidebar" isOpen={this.props.isOpen} type="Over" width="400px" position="Right" target="diagram" showBackdrop="true" style={{ marginTop: "70px" }}>
+            <SidebarComponent id="propeties-sidebar" isOpen={this.props.isOpen} type="Over" width={this.state.width} position="Right" target="diagram" showBackdrop="true" style={{ marginTop: "70px" }}>
                 <div className="center-align">
-                    <div className="container" style={{ marginTop: "10px" }}>
+                    <div className="container">
                         <div className="row">
-                            <div className="col-12">
+                            <div className="col-12" style={{ paddingLeft: "0px", paddingRight: "0px" }}>
                                 {this.getSettingsComponent()}
                             </div>
                         </div>
@@ -47,16 +103,19 @@ export default class SettingsContainer extends Component {
     }
 
     reset(settings) {
-        this.setState({ settingsCopy: new Map(settings)});
+        this.setState({ settingsCopy: new Map(settings) });
     }
 
     cancel() {
-        this.reset(this.props.settings); 
+        this.reset(this.props.settings);
         this.props.cancelConfigure();
     }
 
-    // updateSettings = (newSettings) =>
-    // {
-    //     this.setState({ settings : newSettings});
-    // }
+    expand() {
+        this.setState({ width: "800px" })
+    }
+
+    unexpand() {
+        this.setState({ width: "400px" })
+    }
 }
