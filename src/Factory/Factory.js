@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 import { DialogComponent } from '@syncfusion/ej2-react-popups';
@@ -7,12 +8,17 @@ import Designer from './Designer'
 import StatusBar from './StatusBar'
 import Export from './Export';
 import Import from './Import.js';
+import Deploy from './Deploy/Deploy.js';
 
 const toolStyle = {
     marginRight: "10px",
 }
 
-export default class Factory extends React.Component {
+const separatorStyle = {
+    marginRight: "40px",
+}
+
+class Factory extends React.Component {
     constructor(props) {
         super(props);
 
@@ -20,6 +26,7 @@ export default class Factory extends React.Component {
             lastSaved: 'Not Saved.',
             exportDialogVisibility: false,
             importDialogVisibility: false,
+            deploySidebarVisibility: false,
             factoryChanged: false
         };
 
@@ -55,6 +62,8 @@ export default class Factory extends React.Component {
         const fullFactory = (await axios.get(`http://localhost:7071/api/factory_get?id=${this.factory.id}`)).data;
         this.factory = fullFactory;
         this.load(this.factory);
+
+        this.props.updateCurrentFactory(this.factory)
     }
     
     render() {       
@@ -73,9 +82,10 @@ export default class Factory extends React.Component {
                         exportSelected={() => this.setState({exportDialogVisibility: false})}/>
                 </DialogComponent>
                 <DialogComponent width='500px' target='#factory' isModal={true} visible={this.state.importDialogVisibility} 
-                    overlayClick={this.onOverlayClick} BeforeOpenEventArgs={e => e.maxHeight="auto"}>
+                    overlayClick={this.onOverlayClick}>
                     <Import import={file => this.import(file)}/>
                 </DialogComponent>
+                <Deploy isOpen={this.state.deploySidebarVisibility}/>
                 <div>
                     <div style={{ width: "300px", float: "left" }}> 
                         <Palette/>
@@ -92,12 +102,14 @@ export default class Factory extends React.Component {
                 <nav className="navbar fixed-bottom navbar-light bg-light">
                     <StatusBar lastUpdated={this.state.lastSaved} />
                     <div>
-                        <ButtonComponent cssClass='e-info' style={toolStyle} disabled={!this.state.factoryChanged}
+                        <ButtonComponent cssClass='button-lg-normal' style={toolStyle} disabled={!this.state.factoryChanged}
                             onClick={e => this.setState({exportDialogVisibility: true})}>Export</ButtonComponent>
-                        <ButtonComponent cssClass='e-info' style={toolStyle} 
+                        <ButtonComponent cssClass='button-lg-normal' style={toolStyle} 
                             onClick={e => this.setState({importDialogVisibility: true})}>Import</ButtonComponent>
-                        <ButtonComponent cssClass='e-info' style={toolStyle}>Deploy</ButtonComponent>
-                        <ButtonComponent cssClass='e-success' style={toolStyle}>Publish</ButtonComponent>
+                        <span style={separatorStyle}/>
+                        <ButtonComponent cssClass='button-lg-stand-out' style={toolStyle}
+                            onClick={e => this.setState({deploySidebarVisibility: true})}>Deploy</ButtonComponent>
+                        <ButtonComponent cssClass='button-lg-stand-out-2' style={toolStyle}>Publish</ButtonComponent>
                     </div>
                 </nav>
             </div>
@@ -138,6 +150,7 @@ export default class Factory extends React.Component {
     onOverlayClick() {
         this.setState({exportDialogVisibility: false});
         this.setState({importDialogVisibility: false});
+        this.setState({deployDialogVisibility: false});
     }
 
     exportAsZip() {
@@ -223,3 +236,5 @@ export default class Factory extends React.Component {
         }
     }
 }
+
+export default withRouter(Factory)

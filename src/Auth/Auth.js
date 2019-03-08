@@ -21,7 +21,8 @@ class Auth {
 
   getProfile() {
     return {
-      name: 'Tooraj Helmi'
+      name: 'Tooraj Helmi',
+      id: 'thelmi'
     };
   }
 

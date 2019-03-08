@@ -48,6 +48,40 @@ body > #root > div {
   word-wrap: break-word;      /* IE */
 }
 
+.button-lg-stand-out {
+  border-radius: 0;
+  height: 50px;
+  width: 120px;
+}
+
+.button-lg-stand-out, .button-lg-stand-out:focus, .button-lg-stand-out:active {
+  background-color: #ff6e45;
+  color: #fff;
+}
+
+.button-lg-stand-out-2 {
+  border-radius: 0;
+  height: 50px;
+  width: 120px;
+}
+
+.button-lg-stand-out-2, .button-lg-stand-out-2:focus, .button-lg-stand-out-2:active {
+  background-color: #fa5425;
+  color: #fff;
+}
+
+.button-lg-normal {
+  border-radius: 0;
+  height: 50px;
+  width: 120px;
+}
+
+.button-lg-normal, .button-lg-normal, .button-lg-normal:focus, .button-lg-normal:active {
+  background-color: #1D8495;
+  color: #fff;
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

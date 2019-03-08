@@ -28,16 +28,16 @@ export default class Designer extends React.Component {
         execute: null
     }
 
-    loadEditorCommand = {
-        execute: null
-    }
+    // loadEditorCommand = {
+    //     execute: null
+    // }
 
     componentDidMount() {
         var loadDiagramCommand = this.loadDiagramCommand;
-        var loadEditorCommand = this.loadEditorCommand;
+        //var loadEditorCommand = this.loadEditorCommand;
         this.props.loadFactoryCommand.execute = factory => {
             loadDiagramCommand.execute(factory);
-            loadEditorCommand.execute(factory.script);
+            //loadEditorCommand.execute(factory.script);
         }
     }
 
