@@ -90,8 +90,9 @@ export default class Deploy extends React.Component {
                 this.expandSettings();
             }
             else {
-                axios.post('http://localhost:7071/api/user_update',
-                this.factory);
+                var user = this.props.user;
+                user.cloudSettings.Azure = this.azureSettings;
+                axios.post('http://localhost:7071/api/user_update', user);
             }
         }
     }

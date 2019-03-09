@@ -85,7 +85,7 @@ class Factory extends React.Component {
                     overlayClick={this.onOverlayClick}>
                     <Import import={file => this.import(file)}/>
                 </DialogComponent>
-                <Deploy isOpen={this.state.deploySidebarVisibility}/>
+                <Deploy isOpen={this.state.deploySidebarVisibility} user={this.props.user}/>
                 <div>
                     <div style={{ width: "300px", float: "left" }}> 
                         <Palette/>
