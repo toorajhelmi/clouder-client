@@ -12,7 +12,7 @@
     "@syncfusion/ej2-react-navigations": "^16.4.54",
     "@syncfusion/ej2-react-popups": "^16.4.54",
     "auth0-js": "^9.10.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "codemirror": "^5.44.0",
     "for": "^0.1.0",
     "jszip": "^3.2.0",
